@@ -31,7 +31,11 @@ public class Feb_project {
         ResultSet rs = null;
         rs = dba.readDataBase("select * from users where username='" + userName + "'" + "AND password='" + passWord + "'");
         if (rs.next()) {
-            ls = new LoginScreen(1);
+            if (userName == "admin") {
+                ls = new LoginScreen(1);
+            } else {
+                ls = new LoginScreen(2);
+            }
             System.out.println("succeed");
         } else {
             System.out.println("wrong");
