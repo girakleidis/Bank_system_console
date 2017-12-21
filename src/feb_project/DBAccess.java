@@ -29,8 +29,8 @@ public class DBAccess {
             // This will load the MySQL driver, each DB has its own driver
             Class.forName("com.mysql.jdbc.Driver");
             // Setup the connection with the DB
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?"
-                    + "user=root&password=1234");
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false",
+                    "root", "1234");
 
             // Statements allow to issue SQL queries to the database
             statement = connect.createStatement();
@@ -40,6 +40,7 @@ public class DBAccess {
             ArrayList al = new ArrayList();
             while (resultSet.next()) {
                 al.add(resultSet.getString(1));
+
             }
             System.out.println(al.size());
             return al;
@@ -50,14 +51,14 @@ public class DBAccess {
         }
     }
 
-    public void writeResultSet(ResultSet resultSet) throws SQLException {
-        // ResultSet is initially before the first data set
-        while (resultSet.next()) {
-
-            // It is possible to get the columns via name
-            // also possible to get the columns via the column number
-            // which starts at 1
-            // e.g. resultSet.getSTring(2);
+//    public void writeResultSet(ResultSet resultSet) throws SQLException {
+//        // ResultSet is initially before the first data set
+//        while (resultSet.next()) {
+//
+    // It is possible to get the columns via name
+    // also possible to get the columns via the column number
+    // which starts at 1
+    // e.g. resultSet.getSTring(2);
 //            String user = resultSet.getString("myuser");
 //            String website = resultSet.getString("webpage");
 //            String summary = resultSet.getString("summary");
@@ -68,10 +69,9 @@ public class DBAccess {
 //            System.out.println("summary: " + summary);
 //            System.out.println("Date: " + date);
 //            System.out.println("Comment: " + comment);
-            System.out.println(resultSet.getString(1));
-        }
-    }
-
+//            System.out.println(resultSet.getString(1));
+//        }
+//    }
     private void close() {
         try {
             if (resultSet != null) {
