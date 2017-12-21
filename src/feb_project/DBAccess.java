@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,7 +24,7 @@ public class DBAccess {
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
 
-    public ResultSet readDataBase(String query) throws Exception {
+    public ArrayList readDataBase(String query) throws Exception {
         try {
             // This will load the MySQL driver, each DB has its own driver
             Class.forName("com.mysql.jdbc.Driver");
@@ -35,19 +36,24 @@ public class DBAccess {
             statement = connect.createStatement();
             // Result set get the result of the SQL query
             resultSet = statement.executeQuery(query);
-            //    writeResultSet(resultSet);
-            return resultSet;
 
+            ArrayList al = new ArrayList();
+            while (resultSet.next()) {
+                al.add(resultSet.getString(1));
+            }
+            System.out.println(al.size());
+            return al;
         } catch (Exception e) {
             throw e;
         } finally {
-            //   connect.close();
+            this.close();
         }
     }
 
     public void writeResultSet(ResultSet resultSet) throws SQLException {
         // ResultSet is initially before the first data set
         while (resultSet.next()) {
+
             // It is possible to get the columns via name
             // also possible to get the columns via the column number
             // which starts at 1
