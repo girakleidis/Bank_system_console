@@ -5,11 +5,8 @@
  */
 package feb_project;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,9 +17,15 @@ public class LoginScreen {
     private String loggedUser;
     // 1 for normal user 2 for Admin user
     private int loggedUserLevel;
+    private BankAccount ba;
+    private int userID;
     private DBAccess dba = new DBAccess();
 
     public LoginScreen() {
+    }
+
+    public BankAccount getBa() {
+        return ba;
     }
 
     public String getLoggedUser() {
@@ -33,11 +36,15 @@ public class LoginScreen {
         return loggedUserLevel;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
     public void welcomeScreen(Scanner sc) throws Exception {
         boolean correctCredentials = false;
         String tempUsername = "";
         String tempPassword = "";
-
+        // Eπανάληψη μέχρι να δώσει σωστά credentials ο χρήστης
         while (correctCredentials == false) {
             System.out.println("Please give Credentials");
 
@@ -47,9 +54,10 @@ public class LoginScreen {
             tempPassword = sc.nextLine();
 
             ArrayList al = new ArrayList();
-            al = dba.readDataBase("select username from users where username='" + tempUsername + "'" + "AND password='" + tempPassword + "'");
+            al = dba.readDataBase("select id from users where username='" + tempUsername + "'" + "AND password='" + tempPassword + "'", 1);
             if (al.size() != 0) {
                 correctCredentials = true;
+                this.userID = Integer.parseInt(al.get(0).toString());
             }
         }
         this.loggedUser = tempUsername;
@@ -58,5 +66,10 @@ public class LoginScreen {
         } else {
             this.loggedUserLevel = 1;
         }
+        ArrayList al = new ArrayList();
+        al = dba.readDataBase("select amount from accounts  where user_id='" + this.userID + "';", 1);
+
+        double amount = Double.parseDouble(al.get(0).toString());
+        ba = new BankAccount(amount, this.loggedUser, this.userID);
     }
 }

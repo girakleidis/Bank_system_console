@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -24,26 +23,54 @@ public class DBAccess {
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
 
-    public ArrayList readDataBase(String query) throws Exception {
+    public void updateDataBase(String query) throws Exception {
         try {
             // This will load the MySQL driver, each DB has its own driver
             Class.forName("com.mysql.jdbc.Driver");
             // Setup the connection with the DB
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false",
-                    "root", "1234");
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false", "dbuser", "1234");
+            // Statements allow to issue SQL queries to the database
+            statement = connect.createStatement();
+            statement.executeUpdate(query);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.close();
+        }
 
+    }
+
+    ;
+
+    public ArrayList readDataBase(String query, int columns) throws Exception {
+        try {
+            // This will load the MySQL driver, each DB has its own driver
+            Class.forName("com.mysql.jdbc.Driver");
+            // Setup the connection with the DB
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false", "dbuser", "1234");
             // Statements allow to issue SQL queries to the database
             statement = connect.createStatement();
             // Result set get the result of the SQL query
             resultSet = statement.executeQuery(query);
 
+            //    resultSet.last();
+            //    System.out.println(resultSet.getRow());
             ArrayList al = new ArrayList();
             while (resultSet.next()) {
-                al.add(resultSet.getString(1));
+                if (columns == 1) {
+                    al.add(resultSet.getString(1));
+                } else {
+                    ArrayList al2 = new ArrayList();
+                    for (int i = 1; i <= columns; i++) {
+                        al2.add(resultSet.getString(i));
+                    }
+                    al.add(al2);
+                }
 
             }
-            System.out.println(al.size());
+            //System.out.println(al.size());
             return al;
+
         } catch (Exception e) {
             throw e;
         } finally {
@@ -77,17 +104,13 @@ public class DBAccess {
             if (resultSet != null) {
                 resultSet.close();
             }
-
             if (statement != null) {
                 statement.close();
             }
-
             if (connect != null) {
                 connect.close();
             }
         } catch (Exception e) {
-
         }
     }
-
 }

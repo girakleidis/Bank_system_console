@@ -5,7 +5,6 @@
  */
 package feb_project;
 
-import java.sql.ResultSet;
 import java.util.Scanner;
 
 /**
@@ -14,34 +13,18 @@ import java.util.Scanner;
  */
 public class Feb_project {
 
-    public static Scanner sc = new Scanner(System.in);
-
+    // public static Scanner sc = new Scanner(System.in);
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
         // TODO code application logic here
-        DBAccess dba = new DBAccess();
+
+        //    DBAccess dba = new DBAccess();
         Scanner sc = new Scanner(System.in);
-        LoginScreen ls = null;
-//
-        String userName = sc.nextLine();
-        String passWord = sc.nextLine();
-
-        ResultSet rs = null;
-        rs = dba.readDataBase("select * from users where username='" + userName + "'" + "AND password='" + passWord + "'");
-        if (rs.next()) {
-            if (userName == "admin") {
-                ls = new LoginScreen(1);
-            } else {
-                ls = new LoginScreen(2);
-            }
-            System.out.println("succeed");
-        } else {
-            System.out.println("wrong");
-        }
-
+        LoginScreen ls = new LoginScreen();
+        ls.welcomeScreen(sc);
         AppMenu am = new AppMenu(ls);
-        am.showMenu();
+        am.selectMenu(sc);
     }
 }
