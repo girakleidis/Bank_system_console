@@ -5,6 +5,7 @@
  */
 package feb_project;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -20,8 +21,7 @@ public class Feb_project {
     public static void main(String[] args) throws Exception {
         // TODO code application logic here
 
-        //    DBAccess dba = new DBAccess();
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in).useLocale(Locale.ENGLISH);;
         LoginScreen ls = new LoginScreen();
         ls.welcomeScreen(sc);
         AppMenu am = new AppMenu(ls);

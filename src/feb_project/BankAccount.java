@@ -16,6 +16,7 @@ public class BankAccount {
     private double ballance;
     private String holder;
     private int holderId;
+    private DBAccess dba = new DBAccess();
 
     public BankAccount(double ballance, String holder, int holderId) {
         this.ballance = ballance;
@@ -31,30 +32,30 @@ public class BankAccount {
         return holder;
     }
 
-    public void setHolder(String Holder) {
-        this.holder = holder;
-    }
-
-    public void withdraw() {
-        DBAccess dba = new DBAccess();
+    public void withdrawFromOther(double amount, int id) throws Exception {
+        int result = 0, result2 = 0;
+        result = dba.updateDataBase("Update accounts set amount = amount +" + amount + " where user_id=" + this.holderId + ";");
+        if (result == 1) {
+            result2 = dba.updateDataBase("Update accounts set amount = amount - " + amount + " where user_id=" + id + ";");
+        }
+        if (result2 != 1) {
+            System.out.println("Transfer was unsuccesfull");
+        }
     }
 
     public void transferToAccount(double amount, int id) throws Exception {
         this.ballance -= amount;
-        DBAccess dba = new DBAccess();
-        ArrayList al = new ArrayList();
-        dba.updateDataBase("Update accounts set amount = amount -" + amount + " where user_id=" + this.holderId + ";");
-        dba.updateDataBase("Update accounts set amount = amount + " + amount + " where user_id=" + id + ";");
-    }
-
-    ;
-
-    public void deposit() {
-        DBAccess dba = new DBAccess();
+        int result = 0, result2 = 0;
+        result = dba.updateDataBase("Update accounts set amount = amount -" + amount + " where user_id=" + this.holderId + ";");
+        if (result == 1) {
+            result2 = dba.updateDataBase("Update accounts set amount = amount + " + amount + " where user_id=" + id + ";");
+        }
+        if (result2 != 1) {
+            System.out.println("Transfer was unsuccesfull");
+        }
     }
 
     public double showBalance(int id) throws Exception {
-        DBAccess dba = new DBAccess();
         ArrayList al = new ArrayList();
         al = dba.readDataBase("Select amount from accounts where id = " + id + ";", 1);
         return Double.parseDouble(al.get(0).toString());

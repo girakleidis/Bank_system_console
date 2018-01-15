@@ -5,6 +5,7 @@
  */
 package feb_project;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -41,6 +42,7 @@ public class LoginScreen {
     }
 
     public void welcomeScreen(Scanner sc) throws Exception {
+
         boolean correctCredentials = false;
         String tempUsername = "";
         String tempPassword = "";
@@ -52,6 +54,10 @@ public class LoginScreen {
             tempUsername = sc.nextLine();
             System.out.print("Password: ");
             tempPassword = sc.nextLine();
+            // For CMD only
+//            Console console = System.console();
+//            char[] password = console.readPassword("Password: ");
+//            tempPassword = String.valueOf(password);
 
             ArrayList al = new ArrayList();
             al = dba.readDataBase("select id from users where username='" + tempUsername + "'" + "AND password='" + tempPassword + "'", 1);

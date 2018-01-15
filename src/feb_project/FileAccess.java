@@ -34,7 +34,5 @@ public class FileAccess {
             pw.println(al.get(i).toString());
         }
         pw.close();
-
     }
-;
 }
