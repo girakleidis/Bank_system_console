@@ -26,10 +26,8 @@ public class Feb_project {
 
         Scanner sc = new Scanner(System.in).useLocale(Locale.ENGLISH);
         LoginScreen ls = new LoginScreen();
-
         ls.welcomeScreen(sc);
         AppMenu am = new AppMenu(ls);
-
         am.selectMenu(sc);
     }
 }

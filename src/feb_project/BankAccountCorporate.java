@@ -18,13 +18,14 @@ public class BankAccountCorporate extends BankAccount {
     }
 
     public void withdrawFromOther(double amount, int id) throws Exception {
-        int result = 0, result2 = 0;
-        result = dba.updateDataBase("Update accounts set amount = amount +" + amount + " where user_id=" + super.getHolderId() + ";");
-        if (result == 1) {
-            result2 = dba.updateDataBase("Update accounts set amount = amount - " + amount + " where user_id=" + id + ";");
-        }
-        if (result2 != 1) {
+        super.setBallance(super.getBallance() + amount);
+        String query1 = "Update accounts set amount = amount - " + amount + " where user_id=" + id + ";";
+        String query2 = "Update accounts set amount = amount +" + amount + " where user_id=" + super.getHolderId() + ";";
+        int result = dba.updateDataBase(query1, query2);
+        if (result == 0) {
             System.out.println("Transfer was unsuccesfull");
+            super.setBallance(super.getBallance() - amount);
         }
+
     }
 }

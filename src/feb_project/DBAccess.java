@@ -24,18 +24,29 @@ public class DBAccess {
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
 
-    public int updateDataBase(String query) throws Exception {
+    public int updateDataBase(String query1, String query2) throws Exception {
+        int i = 0;
         try {
             // Setup the connection with the DB
             connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false", "dbuser", "1234");
             // Statements allow to issue SQL queries to the database
-            statement = connect.createStatement();
-            int i = statement.executeUpdate(query);
-            return i;
+            connect.setAutoCommit(false);
+
+            preparedStatement = connect.prepareStatement(query1);
+            preparedStatement.executeUpdate();
+
+            preparedStatement = connect.prepareStatement(query2);
+            preparedStatement.executeUpdate();
+            connect.commit();
+            i = 1;
         } catch (Exception e) {
+            connect.rollback();
+            //i = 0;
             throw e;
+
         } finally {
             this.close();
+            return i;
         }
     }
 
@@ -75,7 +86,7 @@ public class DBAccess {
         }
     }
 
-    private void close() throws SQLException {
+    private void close() throws Exception {
         if (resultSet != null) {
             resultSet.close();
         }

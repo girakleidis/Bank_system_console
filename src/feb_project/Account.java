@@ -49,17 +49,15 @@ public abstract class Account {
     }
 
     public void transferToAccount(double amount, int id) throws Exception {
-        try {
-            this.ballance -= amount;
-            int result = 0, result2 = 0;
-            result = dba.updateDataBase("Update accounts set amount = amount -" + amount + " where user_id=" + this.holderId + ";");
-            result2 = dba.updateDataBase("Update accounts set amount = amount + " + amount + " where user_id=" + id + ";");
-        } catch (Exception ex) {
+        this.ballance -= amount;
+        String query1 = "Update accounts set amount = amount -" + amount + " where user_id=" + this.holderId + ";";
+        String query2 = "Update accounts set amount = amount + " + amount + " where user_id=" + id + ";";
+        int result = dba.updateDataBase(query1, query2);
+        if (result == 0) {
             System.out.println("Transfer was unsuccesfull");
-            throw ex;
-        } finally {
-
+            this.ballance += amount;
         }
+
     }
 
     public double showBalance(int id) throws Exception {
