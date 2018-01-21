@@ -57,7 +57,7 @@ public class AppMenu {
         boolean correctInput = false;
         int i = 0;
         while (correctInput == false) {
-            System.out.println("Input a number from " + min + " to " + max);
+            System.out.println("Input a number from " + "\u001B[31m" + min + "\u001B[0m" + " to " + "\u001B[31m" + max + "\u001B[0m");
             if (!sc.hasNextInt()) {
                 sc.next();
                 continue;

@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -43,9 +44,12 @@ public class DBAccess {
             // Setup the connection with the DB
             connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false", "dbuser", "1234");
             // Statements allow to issue SQL queries to the database
+            PreparedStatement psmt = connect.prepareStatement("");
+            //psmt.setInt(columns, columns);
             statement = connect.createStatement();
             // Result set get the result of the SQL query
             resultSet = statement.executeQuery(query);
+            //resultset psmt.executeQuery();
 
             //    resultSet.last();
             //    System.out.println(resultSet.getRow());
@@ -71,18 +75,16 @@ public class DBAccess {
         }
     }
 
-    private void close() {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connect != null) {
-                connect.close();
-            }
-        } catch (Exception e) {
+    private void close() throws SQLException {
+        if (resultSet != null) {
+            resultSet.close();
         }
+        if (statement != null) {
+            statement.close();
+        }
+        if (connect != null) {
+            connect.close();
+        }
+
     }
 }

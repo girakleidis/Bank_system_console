@@ -5,7 +5,9 @@
  */
 package feb_project;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,9 +28,13 @@ public class FileAccess {
     public FileAccess(LoginScreen ls, ArrayList<String> al) throws FileNotFoundException {
         this.ls = ls;
         if (ls.getLoggedUserLevel() == 1) {
-            pw = new PrintWriter("e:\\statement_" + ls.getLoggedUser() + "_" + dateFormat.format(date) + ".txt");
+            StringBuilder sb = new StringBuilder(ls.getLoggedUser());
+            sb = sb.insert(sb.length() - 1, '_');
+            File file = new File("e:\\statement_" + sb.toString() + "_" + dateFormat.format(date) + ".txt");
+            pw = new PrintWriter(new FileOutputStream(file, true));
         } else {
-            pw = new PrintWriter("e:\\statement_admin_" + dateFormat.format(date) + ".txt");
+            File file = new File("e:\\statement_admin_" + dateFormat.format(date) + ".txt");
+            pw = new PrintWriter(new FileOutputStream(file, true));
         }
         for (int i = 0; i < al.size(); i++) {
             pw.println(al.get(i).toString());
