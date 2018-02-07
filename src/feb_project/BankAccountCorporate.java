@@ -9,7 +9,7 @@ package feb_project;
  *
  * @author George
  */
-public class BankAccountCorporate extends BankAccount {
+public class BankAccountCorporate extends Account {
 
     private DBAccess dba = new DBAccess();
 

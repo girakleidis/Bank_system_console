@@ -18,20 +18,10 @@ public class LoginScreen {
     private String loggedUser;
     // 1 for normal user 2 for Admin user
     private int loggedUserLevel;
-    //  private BankAccountCorporate bac = null;
-    private Account ba = null;
-
     private int userID;
     private DBAccess dba = new DBAccess();
 
     public LoginScreen() {
-    }
-
-//    public BankAccountCorporate getBac() {
-//        return bac;
-//    }
-    public Account getBa() {
-        return ba;
     }
 
     public String getLoggedUser() {
@@ -77,14 +67,20 @@ public class LoginScreen {
         } else {
             this.loggedUserLevel = 1;
         }
-        ArrayList al = new ArrayList();
+        ArrayList al; //= new ArrayList();
         al = dba.readDataBase("select amount from accounts  where user_id='" + this.userID + "';", 1);
 
         double amount = Double.parseDouble(al.get(0).toString());
         if (this.loggedUserLevel == 2) {
-            ba = new BankAccountCorporate(amount, this.loggedUser, this.userID);
+            // ba = new BankAccountCorporate(amount, this.loggedUser, this.userID);
+            AdminUser adminUser = new AdminUser(this.userID, this.loggedUser, this.loggedUserLevel, amount);
+            AppMenu am = new AppMenu(adminUser);
+            am.selectMenu(sc);
         } else {
-            ba = new BankAccount(amount, this.loggedUser, this.userID);
+            //  ba = new BankAccount(amount, this.loggedUser, this.userID);
+            SimpleUser simpleUser = new SimpleUser(this.userID, this.loggedUser, this.loggedUserLevel, amount);
+            AppMenu am = new AppMenu(simpleUser);
+            am.selectMenu(sc);
         }
     }
 }

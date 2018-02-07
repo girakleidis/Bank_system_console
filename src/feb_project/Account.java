@@ -65,6 +65,4 @@ public abstract class Account {
         al = dba.readDataBase("Select amount from accounts where id = " + id + ";", 1);
         return Double.parseDouble(al.get(0).toString());
     }
-
-    public abstract void withdrawFromOther(double amount, int id) throws Exception;
 }

@@ -41,7 +41,6 @@ public class DBAccess {
             i = 1;
         } catch (Exception e) {
             connect.rollback();
-            //i = 0;
             throw e;
 
         } finally {
@@ -55,7 +54,7 @@ public class DBAccess {
             // Setup the connection with the DB
             connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false", "dbuser", "1234");
             // Statements allow to issue SQL queries to the database
-            PreparedStatement psmt = connect.prepareStatement("");
+            //  PreparedStatement psmt = connect.prepareStatement("");
             //psmt.setInt(columns, columns);
             statement = connect.createStatement();
             // Result set get the result of the SQL query

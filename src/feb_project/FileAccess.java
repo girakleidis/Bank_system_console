@@ -20,15 +20,22 @@ import java.util.Date;
  */
 public class FileAccess {
 
-    private LoginScreen ls;
     private PrintWriter pw;
     DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
     Date date = new Date();
 
-    public FileAccess(LoginScreen ls, ArrayList<String> al) throws FileNotFoundException {
-        this.ls = ls;
-        if (ls.getLoggedUserLevel() == 1) {
-            StringBuilder sb = new StringBuilder(ls.getLoggedUser());
+    public FileAccess(SimpleUser user, ArrayList<String> al) throws FileNotFoundException {
+        WritetoFile(1, user.getName(), al);
+    }
+
+    public FileAccess(AdminUser user, ArrayList<String> al) throws FileNotFoundException {
+        WritetoFile(2, user.getName(), al);
+    }
+
+    public void WritetoFile(int accessLevel, String user, ArrayList<String> al) throws FileNotFoundException {
+
+        if (accessLevel == 1) {
+            StringBuilder sb = new StringBuilder(user);
             sb = sb.insert(sb.length() - 1, '_');
             File file = new File("e:\\statement_" + sb.toString() + "_" + dateFormat.format(date) + ".txt");
             pw = new PrintWriter(new FileOutputStream(file, true));

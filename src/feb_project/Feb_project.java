@@ -17,7 +17,6 @@ public class Feb_project {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
 
-    // public static Scanner sc = new Scanner(System.in);
     /**
      * @param args the command line arguments
      */
@@ -27,7 +26,7 @@ public class Feb_project {
         Scanner sc = new Scanner(System.in).useLocale(Locale.ENGLISH);
         LoginScreen ls = new LoginScreen();
         ls.welcomeScreen(sc);
-        AppMenu am = new AppMenu(ls);
-        am.selectMenu(sc);
+        //   AppMenu am = new AppMenu(ls.getUser());
+        //    am.selectMenu(sc);
     }
 }
