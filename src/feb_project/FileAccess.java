@@ -37,10 +37,10 @@ public class FileAccess {
         if (accessLevel == 1) {
             StringBuilder sb = new StringBuilder(user);
             sb = sb.insert(sb.length() - 1, '_');
-            File file = new File("e:\\statement_" + sb.toString() + "_" + dateFormat.format(date) + ".txt");
+            File file = new File("statement_" + sb.toString() + "_" + dateFormat.format(date) + ".txt");
             pw = new PrintWriter(new FileOutputStream(file, true));
         } else {
-            File file = new File("e:\\statement_admin_" + dateFormat.format(date) + ".txt");
+            File file = new File("statement_admin_" + dateFormat.format(date) + ".txt");
             pw = new PrintWriter(new FileOutputStream(file, true));
         }
         for (int i = 0; i < al.size(); i++) {

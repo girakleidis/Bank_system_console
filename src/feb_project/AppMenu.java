@@ -17,23 +17,18 @@ import java.util.Scanner;
  */
 public class AppMenu {
 
-    // private LoginScreen ls;
     private AdminUser adminUser;
     private SimpleUser simpleUser;
     private ArrayList<String> arrayForFile;
     private FileAccess fa;
-    //private BankAccount ba;
-    //private BankAccountCorporate bac;
     DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
 
     public AppMenu(SimpleUser user) {
-        // this.ls = ls;
         this.simpleUser = user;
         this.arrayForFile = new ArrayList<String>();
     }
 
     public AppMenu(AdminUser user) {
-        // this.ls = ls;
         this.adminUser = user;
         this.arrayForFile = new ArrayList<String>();
     }
@@ -84,7 +79,7 @@ public class AppMenu {
         boolean correctInput = false;
         double i = 0.0;
         while (correctInput == false) {
-            System.out.println("Input a number from " + min + " to " + max);
+            System.out.println("Input a number from " + "\u001B[31m" + min + "\u001B[0m" + " to " + "\u001B[31m" + max + "\u001B[0m");
             if (!sc.hasNextDouble()) {
                 sc.next();
                 continue;

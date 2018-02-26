@@ -39,10 +39,12 @@ public class LoginScreen {
     public void welcomeScreen(Scanner sc) throws Exception {
 
         boolean correctCredentials = false;
+        int retries = 0;
         String tempUsername = "";
         String tempPassword = "";
-        // Eπανάληψη μέχρι να δώσει σωστά credentials ο χρήστης
-        while (correctCredentials == false) {
+        // Repeat until correct credentials
+        while (correctCredentials == false && retries < 3) {
+            retries++;
             System.out.println("Please give Credentials");
 
             System.out.print("Username: ");
@@ -55,29 +57,33 @@ public class LoginScreen {
 //            tempPassword = String.valueOf(password);
 
             ArrayList al = new ArrayList();
-            al = dba.readDataBase("select id from users where username='" + tempUsername + "'" + "AND password='" + tempPassword + "'", 1);
+            al = dba.credentialsCheck(tempUsername, tempPassword);
             if (al.size() == 1) {
                 correctCredentials = true;
                 this.userID = Integer.parseInt(al.get(0).toString());
+                this.loggedUser = tempUsername;
             }
         }
-        this.loggedUser = tempUsername;
+
+        if (retries == 3) {
+            System.out.println("Maximum number of login attempts reached Program Aborting");
+            System.exit(0);
+        }
+
         if (this.loggedUser.equals("admin")) {
             this.loggedUserLevel = 2;
         } else {
             this.loggedUserLevel = 1;
         }
-        ArrayList al; //= new ArrayList();
+        ArrayList al;
         al = dba.readDataBase("select amount from accounts  where user_id='" + this.userID + "';", 1);
 
         double amount = Double.parseDouble(al.get(0).toString());
         if (this.loggedUserLevel == 2) {
-            // ba = new BankAccountCorporate(amount, this.loggedUser, this.userID);
             AdminUser adminUser = new AdminUser(this.userID, this.loggedUser, this.loggedUserLevel, amount);
             AppMenu am = new AppMenu(adminUser);
             am.selectMenu(sc);
         } else {
-            //  ba = new BankAccount(amount, this.loggedUser, this.userID);
             SimpleUser simpleUser = new SimpleUser(this.userID, this.loggedUser, this.loggedUserLevel, amount);
             AppMenu am = new AppMenu(simpleUser);
             am.selectMenu(sc);

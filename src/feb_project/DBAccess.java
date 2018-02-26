@@ -24,12 +24,19 @@ public class DBAccess {
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
 
-    public int updateDataBase(String query1, String query2) throws Exception {
+    /**
+     * Using Transactions in case of something happens
+     *
+     * @param query1
+     * @param query2
+     * @return
+     * @throws SQLException
+     */
+    public int updateDataBase(String query1, String query2) throws SQLException {
         int i = 0;
         try {
-            // Setup the connection with the DB
+
             connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false", "dbuser", "1234");
-            // Statements allow to issue SQL queries to the database
             connect.setAutoCommit(false);
 
             preparedStatement = connect.prepareStatement(query1);
@@ -39,31 +46,23 @@ public class DBAccess {
             preparedStatement.executeUpdate();
             connect.commit();
             i = 1;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             connect.rollback();
-            throw e;
-
+            System.out.println("Error With Databse Connection Program Aborting");
+            System.exit(0);
         } finally {
             this.close();
-            return i;
         }
+        return i;
     }
 
-    public ArrayList readDataBase(String query, int columns) throws Exception {
+    public ArrayList readDataBase(String query, int columns) throws SQLException {
+        ArrayList al = new ArrayList();
         try {
-            // Setup the connection with the DB
             connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false", "dbuser", "1234");
-            // Statements allow to issue SQL queries to the database
-            //  PreparedStatement psmt = connect.prepareStatement("");
-            //psmt.setInt(columns, columns);
             statement = connect.createStatement();
-            // Result set get the result of the SQL query
             resultSet = statement.executeQuery(query);
-            //resultset psmt.executeQuery();
 
-            //    resultSet.last();
-            //    System.out.println(resultSet.getRow());
-            ArrayList al = new ArrayList();
             while (resultSet.next()) {
                 if (columns == 1) {
                     al.add(resultSet.getString(1));
@@ -76,16 +75,41 @@ public class DBAccess {
                 }
 
             }
-            return al;
 
-        } catch (Exception e) {
-            throw e;
+        } catch (SQLException se) {
+            System.out.println("Error With Databse Connection Program Aborting");
+            System.exit(0);
         } finally {
             this.close();
+            return al;
         }
     }
 
-    private void close() throws Exception {
+    public ArrayList credentialsCheck(String userName, String password) throws SQLException {
+        ArrayList al = new ArrayList();
+        try {
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/afdemp_java_1?useSSL=false", "dbuser", "1234");
+            PreparedStatement psmt = connect.prepareStatement("select id from users where username=? AND password=?");
+            psmt.setString(1, userName);
+            psmt.setString(2, password);
+
+            resultSet = psmt.executeQuery();
+
+            while (resultSet.next()) {
+                al.add(resultSet.getString(1));
+            }
+
+        } catch (SQLException se) {
+            System.out.println("Error With Databse Connection Program Aborting");
+            System.exit(0);
+        } finally {
+            this.close();
+            return al;
+        }
+
+    }
+
+    private void close() throws SQLException {
         if (resultSet != null) {
             resultSet.close();
         }
